@@ -1,0 +1,33 @@
+version: '3.9'
+networks:
+    app-network:
+services:
+    nginx:
+        depends_on:
+            - wordpress
+        build: ./nginx/
+        image: nginx:1.0
+        container_name: nginx_con
+        ports:
+            - '80:80'
+            - '443:443'
+        volumes:
+            - ./nginx/srcs/inception.conf:/etc/nginx/sites-enabled/inception.conf
+            - ./nginx/srcs/ssl:/etc/nginx/ssl
+        networks:
+            - app-network
+    wordpress:
+        build: ./wordpress/
+        image: wordpress:1.0
+        container_name: wordpress_con
+        volumes:
+            - ./wordpress/wp_srcs:/var/www/wordpress
+            - ./wordpress/www.conf:/etc/php/7.3/fpm/pool.d/www.conf
+        networks:
+            - app-network
+    mariadb:
+        build: ./mariadb
+        image:  mariadb:1.0
+        container_name: mariadb_con
+        networks:
+            - app-network
