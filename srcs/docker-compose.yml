@@ -1,6 +1,13 @@
 version: '3.9'
 networks:
     app-network:
+volumes:
+    db-data:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: "./mariadb/data"
 services:
     nginx:
         depends_on:
@@ -17,17 +24,35 @@ services:
         networks:
             - app-network
     wordpress:
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        env_file:
+          - ./wordpress/WP.env
         build: ./wordpress/
         image: wordpress:1.0
-        container_name: wordpress_con
+        container_name: wp_con
         volumes:
-            - ./wordpress/wp_srcs:/var/www/wordpress
+            #- ./wordpress/srcs:/var/www/wordpress
+            #- ./wordpress/srcs/wp-config.php:/var/www/wordpress/wp-config.php
             - ./wordpress/www.conf:/etc/php/7.3/fpm/pool.d/www.conf
         networks:
             - app-network
     mariadb:
         build: ./mariadb
-        image:  mariadb:1.0
+        image:  mariadb:1.0c
         container_name: mariadb_con
+        env_file:
+            - ./mariadb/srcs/DB.env
+        volumes:
+            #- ./mariadb/srcs/50-server.cnf:/etc/mysql/mariadb.conf.d/50-server.cnf
+            - db-data:/var/lib/mysql
+            #- ./mariadb/config:/etc/mysql/conf.d
+            - ./mariadb/srcs/mariadb.cnf:/etc/mysql/mariadb.cnf
         networks:
             - app-network
+        healthcheck:
+            test: bash -c '[ -d /var/lib/mysql/wordpress ]'
+            start_period: 10s
+            interval: 7s
+            retries: 3
