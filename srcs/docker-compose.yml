@@ -53,6 +53,6 @@ services:
             - app-network
         healthcheck:
             test: bash -c '[ -d /var/lib/mysql/wordpress ]'
-            start_period: 10s
+            start_period: 2s
             interval: 7s
             retries: 3
