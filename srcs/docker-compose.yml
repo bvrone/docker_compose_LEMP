@@ -7,13 +7,13 @@ volumes:
         driver_opts:
             type: none
             o: bind
-            device: "./srcs/mariadb/data"
+            device: "/home/${USER}/data/db_data"
     wp-data:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: "./srcs/wordpress/data"
+            device: "/home/${USER}/data/wp_data"
 services:
     nginx:
         depends_on:
@@ -25,7 +25,6 @@ services:
             - '443:443'
         volumes:
             - ./nginx/srcs/inception.conf:/etc/nginx/sites-enabled/inception.conf
-            #- ./nginx/srcs/ssl:/etc/nginx/ssl
             - wp-data:/var/www/wordpress
         networks:
             - app-network
@@ -34,14 +33,14 @@ services:
             mariadb:
                 condition: service_healthy
         env_file:
-          - ./wordpress/WP.env
+          - ./wordpress/srcs/WP.env
         build: ./wordpress/
         image: wordpress:1.0
         container_name: wp_con
         volumes:
             - wp-data:/var/www/wordpress
-            #- ./wordpress/srcs/wp-config.php:/var/www/wordpress/wp-config.php
-            - ./wordpress/www.conf:/etc/php/7.3/fpm/pool.d/www.conf
+            - ./wordpress/srcs/wp-config.php:/var/www/wordpress/wp-config.php
+            - ./wordpress/srcs/www.conf:/etc/php/7.3/fpm/pool.d/www.conf
         networks:
             - app-network
     mariadb:

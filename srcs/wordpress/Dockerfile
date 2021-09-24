@@ -9,8 +9,8 @@ ADD         ["https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-c
 RUN         chmod +x wp-cli.phar
 RUN         mv wp-cli.phar /usr/local/bin/wp
 RUN         wp core download --allow-root
-COPY        ["./srcs/wp-config.php", "./"]
-COPY        ["./container_setup.sh", "./"]
+#COPY        ["./srcs/wp-config.php", "./"]
+COPY        ["./srcs/container_setup.sh", "./"]
 RUN			chmod +x container_setup.sh
 CMD     	["/usr/sbin/php-fpm7.3", "--nodaemonize"]
 ENTRYPOINT  ["./container_setup.sh"]

@@ -1,7 +1,7 @@
 .PHONY:	all up stop down fclean re
 
 all:
-#	sed -i "s/localhost/${USER}.42.fr/" "etc/hosts"
+	sed -i "s/localhost/${USER}.42.fr/" "etc/hosts"
 	docker-compose -f ./srcs/docker-compose.yml build
 	docker-compose -f ./srcs/docker-compose.yml up -d
 

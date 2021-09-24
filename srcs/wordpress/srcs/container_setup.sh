@@ -2,9 +2,9 @@
 
 if ! $(wp core is-installed --allow-root); then
 	wp config shuffle-salts --allow-root
-    wp core install \
+    wp core install		\
         --allow-root    \
-        --url=localhost        \
+        --url=${WP_SITE_URL}        \
         --title=${WP_SITE_TITLE}    \
         --admin_user=${WP_ADMIN_USER}     \
         --admin_password=${WP_ADMIN_PASS} \

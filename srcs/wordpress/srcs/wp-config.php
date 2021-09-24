@@ -43,6 +43,10 @@ define( 'DB_COLLATE', '' );
 
 define('FS_METHOD', 'direct');
 
+define('WP_HOME', getenv('WP_SITE_URL'));
+define('WP_SITEURL', getenv('WP_SITE_URL'));
+
+
 #$dbvalues = array('DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD');
 /** -------------------------------------------------------------*/
 #foreach ($dbvalues as $dbvalue) {
