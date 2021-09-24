@@ -16,6 +16,6 @@ mysql < mysql_setup.sql
 
 sed -i "s/password =/password = $MYSQL_PASS/" /etc/mysql/debian.cnf
 
-sleep 5
+sleep 3
 
 /etc/init.d/mysql stop

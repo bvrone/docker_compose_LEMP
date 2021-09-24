@@ -10,7 +10,6 @@ RUN         chmod +x wp-cli.phar
 RUN         mv wp-cli.phar /usr/local/bin/wp
 RUN         wp core download --allow-root
 COPY        ["./srcs/wp-config.php", "./"]
-#COPY        ["./srcs/wp-config.php", "/var/tmp/"]
 COPY        ["./container_setup.sh", "./"]
 RUN			chmod +x container_setup.sh
 CMD     	["/usr/sbin/php-fpm7.3", "--nodaemonize"]

@@ -7,7 +7,13 @@ volumes:
         driver_opts:
             type: none
             o: bind
-            device: "./mariadb/data"
+            device: "./srcs/mariadb/data"
+    wp-data:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: "./srcs/wordpress/data"
 services:
     nginx:
         depends_on:
@@ -16,11 +22,11 @@ services:
         image: nginx:1.0
         container_name: nginx_con
         ports:
-            - '80:80'
             - '443:443'
         volumes:
             - ./nginx/srcs/inception.conf:/etc/nginx/sites-enabled/inception.conf
-            - ./nginx/srcs/ssl:/etc/nginx/ssl
+            #- ./nginx/srcs/ssl:/etc/nginx/ssl
+            - wp-data:/var/www/wordpress
         networks:
             - app-network
     wordpress:
@@ -33,7 +39,7 @@ services:
         image: wordpress:1.0
         container_name: wp_con
         volumes:
-            #- ./wordpress/srcs:/var/www/wordpress
+            - wp-data:/var/www/wordpress
             #- ./wordpress/srcs/wp-config.php:/var/www/wordpress/wp-config.php
             - ./wordpress/www.conf:/etc/php/7.3/fpm/pool.d/www.conf
         networks:
@@ -53,6 +59,6 @@ services:
             - app-network
         healthcheck:
             test: bash -c '[ -d /var/lib/mysql/wordpress ]'
-            start_period: 2s
+            start_period: 10s
             interval: 7s
             retries: 3
